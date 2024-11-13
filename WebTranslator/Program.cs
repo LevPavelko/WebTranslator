@@ -21,9 +21,10 @@ builder.Services.AddUnitOfWorkService();
 builder.Services.AddTransient<DbContext, WebTranslatorContext>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddControllers();
+
 // Build the app
 var app = builder.Build();
-app.MapControllers();
+
 
 
 ////////////////////////////////////////////////////////////////
@@ -34,6 +35,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.MapControllers();
+
+app.UseCors(builder => builder.WithOrigins("http://localhost:5173")
+                           .AllowAnyHeader()
+                           .AllowAnyMethod());
+
 
 app.Run();
 

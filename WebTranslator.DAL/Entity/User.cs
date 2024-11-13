@@ -10,11 +10,11 @@ public class User : IDbEntity
     [Column("id")]
     public Guid Id { get; set; }
         
-    [Column("first_name")]
-    public required string FirstName { get; set; }
+   
     
-    [Column("last_name")]
-    public required string LastName { get; set; }
+    [Column("login")]
+    public required string Login { get; set; }
+
     
     [Column("password")]
     public required string Password { get; set; }

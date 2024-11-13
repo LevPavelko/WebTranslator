@@ -11,7 +11,21 @@ public class WebTranslatorContext : DbContext
     public WebTranslatorContext(DbContextOptions<WebTranslatorContext> options)
         : base(options)
     {
-        Database.EnsureCreated();
+       
+        if (Database.EnsureCreated())
+        {
+            User user = new User
+            {
+                Id = Guid.NewGuid(),
+                Login = "lev",
+                Password = "123456",
+                Salt = "123456",
+            
+            
+            };
+            Users.Add(user);
+            SaveChanges();
+        }
 
     }
     // public WebTranslatorContext(DbContextOptions<WebTranslatorContext> options) : base(options)

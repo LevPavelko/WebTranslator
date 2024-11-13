@@ -16,5 +16,15 @@ public class UserRepository : IUserRepository
     {
         return await db.Users.ToListAsync();
     }
+
+    public async Task<User> GetUserByLogin(string login)
+    {
+        return await db.Users.FirstOrDefaultAsync(x => x.Login == login);
+    }
+
+    public async Task Create(User user)
+    {
+        await db.Users.AddAsync(user);
+    }
     
 }
