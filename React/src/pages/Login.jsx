@@ -37,11 +37,26 @@ function Login() {
         };
     }, []);
 
+    function setCookie(name, value, days) {
+        let expires = "";
+        if (days) {
+            let date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+
+        document.cookie = name + "=" + (value || "") + expires + "; path=/; Secure; ";
+    }
+
+
+
+
+
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
 
-            const response = await fetch('http://localhost:5155/Login', {
+            const response = await fetch('http://localhost:5155/api/user/Login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -53,12 +68,12 @@ function Login() {
             const data = await response.json();
             console.log(data);
             if (response.ok) {
-
+                setCookie("isLogin", "true", 7);
                 console.log('Login successful', data);
                 navigate('/')
             }else if (response.status === 401) {
 
-                setError('Invalid username or password.');
+                setError(data.message);
             }
             else {
                 setError(data.message || 'Login failed');
@@ -76,7 +91,7 @@ function Login() {
             if(password != confirmPassword) {
                 setError("Passwords don't match");
             }
-            const response = await fetch('http://localhost:5155/Register', {
+            const response = await fetch('http://localhost:5155/api/user/Register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -87,6 +102,7 @@ function Login() {
             const data = await response.json();
 
             if (response.ok) {
+                setCookie("isLogin", "true", 7);
                 navigate("/");
                 console.log('Registration successful');
 
@@ -133,9 +149,7 @@ function Login() {
                                 <i className="bx bxs-lock-alt"></i>
                             </div>
                             {error && <div className="error-message">{error}</div>}
-                            <div className="forgot-link">
-                                <a href="#">Forgot Password?</a>
-                            </div>
+
                             <button type="submit" className="btn" id="submitLogin">Login</button>
                         </form>
                     </div>
@@ -175,6 +189,7 @@ function Login() {
                                 <i className="bx bxs-lock-alt"></i>
                             </div>
                             {error && <div className="error-message">{error}</div>}
+
                             <button type="submit" className="btn" id="submitReg">Register</button>
                         </form>
                     </div>

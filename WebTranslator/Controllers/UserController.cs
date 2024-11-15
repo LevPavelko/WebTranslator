@@ -13,7 +13,7 @@ using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 namespace WebTranslator.Controllers;
 
 [ApiController]
-[Microsoft.AspNetCore.Components.Route("api/webTranslator/")]
+[Route("api/user/")]
 public class UserController : ControllerBase
 {
     private readonly  IUserService _userService;
@@ -36,7 +36,7 @@ public class UserController : ControllerBase
         var user = await _userService.GetUserByLogin(model.username);
 
        
-        if (user != null && user.Password == model.password)
+        if (user != null && user.Password == Decryption(user.Salt, model.password))
         {
            
             var userToReturn = new
@@ -45,7 +45,7 @@ public class UserController : ControllerBase
                 user.Login
             };
 
-            
+            HttpContext.Session.SetString("userlogin", model.username);
             return new JsonResult(new { message = "Login successful", user = userToReturn });
         
         }
@@ -88,10 +88,24 @@ public class UserController : ControllerBase
         userDto.Salt = salt;
         await _userService.Create(userDto);
 
-        //HttpContext.Session.SetString("userlogin", reg.username);
+        HttpContext.Session.SetString("userlogin", reg.username);
         return Ok(new { message = "User registered successfully" });
        
            
+
+    }
+    
+    [HttpPost("decryption")]
+    public string Decryption(string salt,  string enteredPassword) {
+           
+        byte[] password = Encoding.Unicode.GetBytes(salt + enteredPassword);
+
+        byte[] byteHash = SHA256.HashData(password);
+
+        StringBuilder hash = new StringBuilder(byteHash.Length);
+        for (int i = 0; i < byteHash.Length; i++)
+            hash.Append(string.Format("{0:X2}", byteHash[i]));
+        return hash.ToString();
 
     }
         

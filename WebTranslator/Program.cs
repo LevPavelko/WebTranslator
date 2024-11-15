@@ -7,6 +7,7 @@ using WebTranslator.DAL.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 string? connStr = builder.Configuration.GetConnectionString("DefaultConnStr");
@@ -21,10 +22,12 @@ builder.Services.AddUnitOfWorkService();
 builder.Services.AddTransient<DbContext, WebTranslatorContext>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddControllers();
+builder.Services.AddDistributedMemoryCache();
 
+builder.Services.AddSession();
 // Build the app
 var app = builder.Build();
-
+app.UseSession();
 
 
 ////////////////////////////////////////////////////////////////
@@ -39,7 +42,8 @@ app.MapControllers();
 
 app.UseCors(builder => builder.WithOrigins("http://localhost:5173")
                            .AllowAnyHeader()
-                           .AllowAnyMethod());
+                           .AllowAnyMethod()
+                            .AllowCredentials());
 
 
 app.Run();

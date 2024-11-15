@@ -230,3 +230,7 @@ form{ width: 100%; }
 
     .toggle-panel h1{font-size: 30px; }
 }
+.error-message{
+    color: red;
+    padding: 10px;
+}
