@@ -3,5 +3,21 @@ body{
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: linear-gradient(90deg, #e2e2e2, #c9d6ff);
+    background: linear-gradient(200deg, #e2e2e2, #c9d6ff);
+}
+
+h1{
+    @import url('https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&display=swap');
+
+
+}
+
+.get-started{
+   width: 20% !important;
+}
+.center-div{
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

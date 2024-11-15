@@ -4,6 +4,7 @@ import Home from './pages/Home.jsx';
 import './App.css';
 import Login from "./pages/Login.jsx";
 import Navigation from "./Navigation.jsx";
+import Translator from "./pages/Translator.jsx";
 
 function App() {
     return (
@@ -14,6 +15,7 @@ function App() {
 
                         <Route path="/" element={<Home />} />
                         <Route path="/login" element={<Login />} />
+                        <Route path="/translator" element={<Translator />} />
 
                 </Routes>
             </div>
