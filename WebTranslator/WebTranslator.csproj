@@ -21,6 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\WebTranslator.Lib\WebTranslator.Lib.csproj" />
       <ProjectReference Include="..\WebTranslator.BLL\WebTranslator.BLL.csproj" />
     </ItemGroup>
 
