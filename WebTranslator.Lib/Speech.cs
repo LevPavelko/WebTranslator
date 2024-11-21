@@ -119,7 +119,29 @@ public class Speech
         }
 
         return new TranslateModel();
-    }   
+    }
+
+    public async Task<string> TextToSpeech(string text)
+    {
+        var speechConfig = SpeechConfig.FromSubscription("f1835bf847064e36a7c3f95f81f53355", "eastus");
+        speechConfig.SpeechSynthesisVoiceName = "en-US-AvaMultilingualNeural"; 
+
+        try
+        {
+            var filePath = Path.Combine("Uploads/", "translated_audio.wav");
+            var audioConfig = AudioConfig.FromWavFileOutput(filePath);
+            using var synthesizer = new SpeechSynthesizer(speechConfig, audioConfig);
+            var result = await synthesizer.SpeakTextAsync(text);
+            return filePath;
+           
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error occurred: {ex.Message}");
+            
+        }
+        return "Something went wrong";
+    }
     
     static string RemoveAfterDash(string text)
     {

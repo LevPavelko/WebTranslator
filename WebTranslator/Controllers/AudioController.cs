@@ -47,9 +47,13 @@ public class AudioController : ControllerBase
 
         var speechService = new Speech();
         TranslateModel result = await speechService.SpeechToText(model.from, model.to, filePath);
-        
-   
-
+        string pathToTranslatedAudio = await speechService.TextToSpeech(result.to);
+        if (pathToTranslatedAudio != null)
+        {
+            var fileBytes = await System.IO.File.ReadAllBytesAsync(pathToTranslatedAudio);
+            result.translatedAudio = fileBytes;
+        }
+        System.IO.File.Delete(pathToTranslatedAudio);
         return Ok(new { message = "Аудио успешно загружено", result });
     }
 

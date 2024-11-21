@@ -11,6 +11,7 @@ function Translator() {
     const navigate = useNavigate();
     const [isRecording, setIsRecording] = useState(false);
     const [audioUrl, setAudioUrl] = useState(null);
+    const audioRef = useRef(null);
 
     const mediaRecorderRef = useRef(null);
     const audioChunksRef = useRef([]);
@@ -42,10 +43,16 @@ function Translator() {
         }
     }, [navigate]);
 
+    useEffect(() => {
+        if (audioRef.current && audioUrl) {
+            audioRef.current.load();
+        }
+    }, [audioUrl]);
+
     if (!isAuthenticated) {
         return <div>Redirecting...</div>;
     }
-
+   
     const startRecording = async (e) => {
         e.preventDefault();
         setError("");
@@ -80,7 +87,10 @@ function Translator() {
     const uploadAudio = async (audioBlob, from, to) => {
 
         try {
+            console.log(from,to)
             setLoading(true);
+            setAudioUrl(null);
+            console.log(audioUrl);
             const formData = new FormData();
             formData.append('audio', audioBlob, 'audio.wav');
             formData.append('from', from);
@@ -93,11 +103,28 @@ function Translator() {
             });
 
             const data = await response.json();
-
+         
             if (response.ok) {
                 console.log('Аудио успешно загружено');
                 setOriginal(data.result.from);
                 setTranslate(data.result.to);
+                if (data.result.translatedAudio) {
+
+
+                    const base64String = data.result.translatedAudio;
+                    const audioData = atob(base64String);
+                    const byteArray = new Uint8Array(audioData.length);
+
+                    for (let i = 0; i < audioData.length; i++) {
+                        byteArray[i] = audioData.charCodeAt(i);
+                    }
+
+                    const audioBlob = new Blob([byteArray], { type: 'audio/wav' });
+
+
+                    setAudioUrl(URL.createObjectURL(audioBlob));
+
+                }
             } else if (response.status === 400){
                 setError("Select language");
                 console.log(data);
@@ -108,6 +135,7 @@ function Translator() {
         }finally {
 
             setLoading(false);
+            console.log(audioUrl);
         }
     };
 
@@ -150,7 +178,11 @@ function Translator() {
                 </div>
                 <div className={'text-block'}>
                     <p id={'translate'}>{translate}</p>
-                   
+                    <audio id="audioPlayer" controls ref={audioRef}>
+                        {audioUrl && <source id="audioSource" type="audio/wav" src={audioUrl}/>}
+                        Your browser does not support the audio element.
+                    </audio>
+
                 </div>
             </div>
 
