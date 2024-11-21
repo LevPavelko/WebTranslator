@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../translator.css';
 
 import Dropdown from "../Dropdown.jsx";
+import {OrbitProgress} from "react-loading-indicators";
 
 
 function Translator() {
@@ -15,8 +16,14 @@ function Translator() {
     const audioChunksRef = useRef([]);
     const options = ['ru-RU', 'en-US', 'fr-FR', 'es-ES'];
 
+    const [from, setFrom] = useState('');
+    const [to, setTo] = useState('');
+    
+    const [error, setError] = useState('');
+
     const [original, setOriginal] = useState('');
     const [translate, setTranslate] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const getCookie = (name) => {
         const value = `; ${document.cookie}`;
@@ -41,8 +48,10 @@ function Translator() {
 
     const startRecording = async (e) => {
         e.preventDefault();
+        setError("");
         setAudioUrl(null);
-        console.log(`Recording in ${original}, translating to ${translate}`);
+        console.log(`Recording in ${from}, translating to ${to}`);
+        audioChunksRef.current = [];
 
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
@@ -52,13 +61,9 @@ function Translator() {
         };
 
         mediaRecorderRef.current.onstop = () => {
+            
             const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
-            const newAudioUrl = URL.createObjectURL(audioBlob);
-
-            setAudioUrl(newAudioUrl);
-            console.log("audio url on start ...." + audioUrl);
-
-            uploadAudio(audioBlob);
+            uploadAudio(audioBlob, from, to);
         };
 
         mediaRecorderRef.current.start();
@@ -66,22 +71,46 @@ function Translator() {
     };
 
     const stopRecording = () => {
-        mediaRecorderRef.current.stop();
-        setIsRecording(false);
+        if (mediaRecorderRef.current) {
+            mediaRecorderRef.current.stop();
+            setIsRecording(false);
+        }
     };
 
-    const uploadAudio = (audioBlob) => {
-        const formData = new FormData();
-        formData.append('audio', audioBlob, 'audio.wav');
+    const uploadAudio = async (audioBlob, from, to) => {
 
-        fetch('http://localhost:5155/api/audio/upload', {
-            method: 'POST',
-            body: formData,
-        })
-            .then((response) => response.json())
-            .then((data) => console.log('Аудио успешно загружено', data))
-            .catch((error) => console.error('Ошибка при загрузке аудио:', error));
+        try {
+            setLoading(true);
+            const formData = new FormData();
+            formData.append('audio', audioBlob, 'audio.wav');
+            formData.append('from', from);
+            formData.append('to', to);
+            console.log(formData);
+
+            const response = await fetch('http://localhost:5155/api/audio/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                console.log('Аудио успешно загружено');
+                setOriginal(data.result.from);
+                setTranslate(data.result.to);
+            } else if (response.status === 400){
+                setError("Select language");
+                console.log(data);
+            }
+        } catch (error) {
+            console.error('Ошибка при загрузке аудио:', error);
+            setError('Произошла ошибка. Пожалуйста, попробуйте снова.');
+        }finally {
+
+            setLoading(false);
+        }
     };
+
 
     return (
         <div className={'container-body'}>
@@ -90,39 +119,44 @@ function Translator() {
             <form onSubmit={startRecording}>
 
                 <div className="button-container">
-                    <button type='submit' className="btn start-stop"  disabled={isRecording}>Start</button>
+                    <button type='submit' className="btn start-stop" disabled={isRecording}>Start</button>
 
                     <button className="btn start-stop" onClick={stopRecording} disabled={!isRecording}>Stop</button>
-                </div>
 
+                </div>
+                <div className={"center-div"}> {loading &&
+                    <OrbitProgress variant="track-disc" color="white" size="medium" text="" textColor=""/>}</div>
                 <div className={'lang-container'}>
                     <Dropdown
                         options={options}
-                        value={original}
-                        onChange={setOriginal}
+                        value={from}
+                        onChange={setFrom}
                     />
 
                     <h4>to</h4>
 
                     <Dropdown
                         options={options}
-                        value={translate}
-                        onChange={setTranslate}
+                        value={to}
+                        onChange={setTo}
                     />
                 </div>
-
 
             </form>
 
             <div className="lang-container">
                 <div className={'text-block'}>
-                    <p id={'original'}></p>
+                    <p id={'original'}>{original}</p>
                 </div>
                 <div className={'text-block'}>
-                    <p id={'translate'}></p>
+                    <p id={'translate'}>{translate}</p>
+                   
                 </div>
             </div>
 
+            <div className={"error"}>
+                <p>{error}</p>
+            </div>
 
         </div>
     );
