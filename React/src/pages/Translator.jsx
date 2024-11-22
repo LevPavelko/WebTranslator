@@ -52,11 +52,36 @@ function Translator() {
     if (!isAuthenticated) {
         return <div>Redirecting...</div>;
     }
-   
-    const startRecording = async (e) => {
-        e.preventDefault();
+
+    const handlePlay = () => {
+        if (audioRef.current) {
+            audioRef.current.play();
+        }
+    };
+
+    const cleanBeforeRecording = () => {
         setError("");
         setAudioUrl(null);
+        setOriginal('');
+        setTranslate('');
+
+    };
+
+
+        const handleCopy = async (content) => {
+            try {
+                await navigator.clipboard.writeText(content);
+                console.log('Copied to clipboard:', content);
+            } catch (error) {
+                console.error('Unable to copy to clipboard:', error);
+            }
+        };
+
+        const startRecording = async (e) => {
+        e.preventDefault();
+
+        cleanBeforeRecording();
+
         console.log(`Recording in ${from}, translating to ${to}`);
         audioChunksRef.current = [];
 
@@ -154,7 +179,7 @@ function Translator() {
                 </div>
                 <div className={"center-div"}> {loading &&
                     <OrbitProgress variant="track-disc" color="white" size="medium" text="" textColor=""/>}</div>
-                <div className={'lang-container'}>
+                <div className={'lang-container center-div'}>
                     <Dropdown
                         options={options}
                         value={from}
@@ -178,10 +203,19 @@ function Translator() {
                 </div>
                 <div className={'text-block'}>
                     <p id={'translate'}>{translate}</p>
-                    <audio id="audioPlayer" controls ref={audioRef}>
-                        {audioUrl && <source id="audioSource" type="audio/wav" src={audioUrl}/>}
-                        Your browser does not support the audio element.
-                    </audio>
+                    {original !== "" && translate !== "" && (
+                        <div style={{marginTop: '40px' }}>
+                            <button onClick={handlePlay} className={"play-button"}>
+                                <img src={"./src/assets/95021.png"} className={"img"} />
+                            </button>
+
+                            <audio ref={audioRef} src={audioUrl} />
+
+                            <button onClick={() => handleCopy(translate)} className={"copy-button"}>
+                                <img src={"./src/assets/copy.svg"} className={"img"}/>
+                            </button>
+                        </div>
+                    )}
 
                 </div>
             </div>
