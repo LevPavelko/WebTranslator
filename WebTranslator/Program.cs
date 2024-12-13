@@ -29,14 +29,15 @@ builder.Services.AddSession();
 var app = builder.Build();
 app.UseSession();
 
-
 ////////////////////////////////////////////////////////////////
-if (app.Environment.IsDevelopment())
+/*if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+}*/
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.MapControllers();
 
