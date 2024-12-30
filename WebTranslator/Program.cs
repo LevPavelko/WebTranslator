@@ -41,7 +41,7 @@ app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.MapControllers();
 
-app.UseCors(builder => builder.WithOrigins("http://localhost:5173")
+app.UseCors(builder => builder.WithOrigins("http://localhost:5155")
                            .AllowAnyHeader()
                            .AllowAnyMethod()
                             .AllowCredentials());

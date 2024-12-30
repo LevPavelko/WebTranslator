@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+﻿    using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.CognitiveServices.Speech;
@@ -58,9 +58,9 @@ public class Speech
             string fromLanguage  = RemoveAfterDash(from);
             string toLanguage = RemoveAfterDash(to);
             var path = RemoveFullPath(pathFile);
-              
-           
-            ConverToWav(path, convertedFilePath);
+
+
+            ConvertToPcm16Le(path, convertedFilePath);
            
             if (!IsWavFile(convertedFilePath))
             {

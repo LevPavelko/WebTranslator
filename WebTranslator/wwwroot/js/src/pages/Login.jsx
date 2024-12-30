@@ -56,7 +56,7 @@ function Login() {
         e.preventDefault();
         try {
 
-            const response = await fetch('http://localhost:5155/api/user/Login', {
+            const response = await fetch('http://localhost:7094/api/user/Login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -91,7 +91,7 @@ function Login() {
             if(password != confirmPassword) {
                 setError("Passwords don't match");
             }
-            const response = await fetch('http://localhost:5155/api/user/Register', {
+            const response = await fetch('http://localhost:7094/api/user/Register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
