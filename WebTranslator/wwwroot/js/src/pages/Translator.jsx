@@ -66,21 +66,40 @@ function Translator() {
         setTranslate('');
 
     };
-
-
-        const handleCopy = async (content) => {
+  
+    const handleCopy = async (content) => {
             try {
                 await navigator.clipboard.writeText(content);
-                console.log('Copied to clipboard:', content);
+               
             } catch (error) {
                 console.error('Unable to copy to clipboard:', error);
             }
         };
 
-        const startRecording = async (e) => {
+    const startRecording = async (e) => {
         e.preventDefault();
 
         cleanBeforeRecording();
+
+        //console.log(`Recording in ${from}, translating to ${to}`);
+        //audioChunksRef.current = [];
+
+        //const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+        //mediaRecorderRef.current = new MediaRecorder(stream);
+        //mediaRecorderRef.current.ondataavailable = (event) => {
+        //    audioChunksRef.current.push(event.data);
+        //};
+
+        //mediaRecorderRef.current.onstop = () => {
+            
+        //    const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
+        //    uploadAudio(audioBlob, from, to);
+        //};
+
+        //mediaRecorderRef.current.start();
+        //setIsRecording(true); 
+
 
         console.log(`Recording in ${from}, translating to ${to}`);
         audioChunksRef.current = [];
@@ -92,14 +111,24 @@ function Translator() {
             audioChunksRef.current.push(event.data);
         };
 
-        mediaRecorderRef.current.onstop = () => {
-            
-            const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
-            uploadAudio(audioBlob, from, to);
+        mediaRecorderRef.current.onstop = async () => {
+           
+            const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+            const wavBlob = await convertToWav(audioBlob);
+            uploadAudio(wavBlob, from, to);
         };
 
         mediaRecorderRef.current.start();
         setIsRecording(true);
+        
+    };
+    const convertToWav = async (blob) => {
+        const arrayBuffer = await blob.arrayBuffer();
+        const audioContext = new AudioContext();
+        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
+        const wavBuffer = encodeWAV(audioBuffer);
+        return new Blob([wavBuffer], { type: 'audio/wav' });
     };
 
     const stopRecording = () => {
@@ -109,18 +138,66 @@ function Translator() {
         }
     };
 
+    const encodeWAV = (audioBuffer) => {
+        const numChannels = audioBuffer.numberOfChannels;
+        const sampleRate = audioBuffer.sampleRate;
+        const format = 1;
+        const bitDepth = 16;
+
+        const samples = audioBuffer.getChannelData(0);
+        const bytesPerSample = bitDepth / 8;
+        const blockAlign = numChannels * bytesPerSample;
+        const byteRate = sampleRate * blockAlign;
+
+        const bufferLength = 44 + samples.length * bytesPerSample;
+        const buffer = new ArrayBuffer(bufferLength);
+        const view = new DataView(buffer);
+
+       
+        writeString(view, 0, 'RIFF');
+        view.setUint32(4, 36 + samples.length * bytesPerSample, true); 
+        writeString(view, 8, 'WAVE'); 
+        writeString(view, 12, 'fmt '); 
+        view.setUint32(16, 16, true);
+        view.setUint16(20, format, true); 
+        view.setUint16(22, numChannels, true); 
+        view.setUint32(24, sampleRate, true); 
+        view.setUint32(28, byteRate, true);
+        view.setUint16(32, blockAlign, true); 
+        view.setUint16(34, bitDepth, true);
+        writeString(view, 36, 'data'); 
+        view.setUint32(40, samples.length * bytesPerSample, true); 
+
+        
+        let offset = 44;
+        for (let i = 0; i < samples.length; i++, offset += 2) {
+            const s = Math.max(-1, Math.min(1, samples[i]));
+            view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+        }
+
+        return buffer;
+    };
+
+    const writeString = (view, offset, string) => {
+        for (let i = 0; i < string.length; i++) {
+            view.setUint8(offset + i, string.charCodeAt(i));
+        }
+    };
     const uploadAudio = async (audioBlob, from, to) => {
 
         try {
-            console.log(from,to)
+            
             setLoading(true);
             setAudioUrl(null);
-            console.log(audioUrl);
+           
             const formData = new FormData();
             formData.append('audio', audioBlob, 'audio.wav');
+            console.log("type of file");
+            console.log(audioBlob.type);
+
             formData.append('from', from);
             formData.append('to', to);
-            console.log(formData);
+           
 
             const response = await fetch('http://localhost:5155/api/audio/upload', {
                 method: 'POST',
@@ -168,11 +245,11 @@ function Translator() {
     return (
         <div className={'container-body'}>
             <h1>Translator</h1>
-
-            <form onSubmit={startRecording}>
+          
+            <form onSubmit={startRecording}> 
 
                 <div className="button-container">
-                    <button type='submit' className="btn start-stop" disabled={isRecording}>Start</button>
+                    <button type='submit' className="btn start-stop" disabled={isRecording} >Start</button>
 
                     <button className="btn start-stop" onClick={stopRecording} disabled={!isRecording}>Stop</button>
 
@@ -206,14 +283,15 @@ function Translator() {
                     {original !== "" && translate !== "" && (
                         <div style={{marginTop: '40px' }}>
                             <button onClick={handlePlay} className={"play-button"}>
-                                <img src={"./src/assets/95021.png"} className={"img"} />
+                                <img src={"./js/src/assets/95021.png"} className={"img"} />
                             </button>
 
                             <audio ref={audioRef} src={audioUrl} />
 
                             <button onClick={() => handleCopy(translate)} className={"copy-button"}>
-                                <img src={"./src/assets/copy.svg"} className={"img"}/>
+                                <img src={"./js/src/assets/copy.svg"} className={"img"}/>
                             </button>
+                          
                         </div>
                     )}
 

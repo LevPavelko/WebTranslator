@@ -25,6 +25,7 @@ builder.Services.AddControllers();
 builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession();
+
 // Build the app
 var app = builder.Build();
 app.UseSession();
@@ -35,6 +36,7 @@ app.UseSession();
     app.UseSwagger();
     app.UseSwaggerUI();
 }*/
+
 
 app.UseDefaultFiles();
 app.UseStaticFiles();

@@ -174,16 +174,36 @@ public class Speech
         }
            
     }
-    
+
     private void ConvertToPcm16Le(string inputFilePath, string outputFilePath)
     {
-        using (var reader = new AudioFileReader(inputFilePath))
-        {
-            var format = new WaveFormat(16000, 16, 1);
-            using (var resampler = new MediaFoundationResampler(reader, format))
+            using (var reader = new AudioFileReader(inputFilePath))
             {
-                WaveFileWriter.CreateWaveFile(outputFilePath, resampler);
+                var format = new WaveFormat(16000, 16, 1);
+                using (var resampler = new MediaFoundationResampler(reader, format))
+                {
+                    WaveFileWriter.CreateWaveFile(outputFilePath, resampler);
+                }
             }
-        }
+       
     }
+
+    //private void ConvertRawToPcm16Le(string inputFilePath, string outputFilePath)
+    //{
+    //    // Формат входного файла (например, RAW, 44.1 кГц, 16 бит, стерео)
+    //    var inputFormat = new WaveFormat(44100, 16, 2);
+
+    //    // Читаем "сырые" данные
+    //    using (var rawStream = new RawSourceWaveStream(File.OpenRead(inputFilePath), inputFormat))
+    //    {
+    //        // Конвертируем в формат 16 кГц, 16 бит, моно
+    //        var outputFormat = new WaveFormat(16000, 16, 1);
+    //        using (var resampler = new MediaFoundationResampler(rawStream, outputFormat))
+    //        {
+    //            resampler.ResamplerQuality = 60; // Устанавливаем качество ресемплинга
+    //            WaveFileWriter.CreateWaveFile(outputFilePath, resampler);
+    //        }
+    //    }
+    //}
+
 }
