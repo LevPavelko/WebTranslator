@@ -1,5 +1,19 @@
-bin/
-obj/
-/packages/
-riderModule.iml
-/_ReSharper.Caches/
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/WebTranslator/wwwroot/js/node_modules
+/WebTranslator/bin/Debug/net8.0
+/WebTranslator/obj
+/.vs
+/WebTranslator.BLL/bin/Debug/net8.0
+/WebTranslator.DAL/bin/Debug/net8.0
+/WebTranslator.DAL/obj/Debug/net8.0
+/WebTranslator.BLL/obj/Debug/net8.0
+/WebTranslator.BLL/obj
+/WebTranslator.DAL/obj
+/WebTranslator.Domain/bin/Debug/net8.0
+/WebTranslator.Domain/obj/Debug/net8.0
+/WebTranslator.Domain/obj
+/WebTranslator.Lib/bin/Debug/net8.0
+/WebTranslator.Lib/obj
