@@ -13,7 +13,7 @@ function Home() {
         e.preventDefault();
         try {
 
-            const response = await fetch('http://localhost:5155/api/home/checkCookie', {
+            const response = await fetch('https://webtranslator-bdgtdnb7cde9eedp.canadacentral-01.azurewebsites.net/api/home/checkCookie', {
                 method: 'GET',
                 credentials: 'include',
                 headers: {

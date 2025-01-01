@@ -43,7 +43,7 @@ app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.MapControllers();
 
-app.UseCors(builder => builder.WithOrigins("http://localhost:5155")
+app.UseCors(builder => builder.WithOrigins("https://webtranslator-bdgtdnb7cde9eedp.canadacentral-01.azurewebsites.net")
                            .AllowAnyHeader()
                            .AllowAnyMethod()
                             .AllowCredentials());

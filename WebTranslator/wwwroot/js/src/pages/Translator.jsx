@@ -199,7 +199,7 @@ function Translator() {
             formData.append('to', to);
            
 
-            const response = await fetch('http://localhost:5155/api/audio/upload', {
+            const response = await fetch('https://webtranslator-bdgtdnb7cde9eedp.canadacentral-01.azurewebsites.net/api/audio/upload', {
                 method: 'POST',
                 body: formData
             });
