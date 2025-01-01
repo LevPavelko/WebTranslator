@@ -6,6 +6,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebTranslator.DAL", "WebTra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebTranslator.BLL", "WebTranslator.BLL\WebTranslator.BLL.csproj", "{AA7F4291-664F-4161-9F07-9A01C355820A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebTranslator.Domain", "WebTranslator.Domain\WebTranslator.Domain.csproj", "{4BBB23C9-9E3A-4620-BB14-86DD5AA17340}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebTranslator.Lib", "WebTranslator.Lib\WebTranslator.Lib.csproj", "{E9F62F72-92F1-42B5-A101-41F29350A4C4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +28,13 @@ Global
 		{AA7F4291-664F-4161-9F07-9A01C355820A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA7F4291-664F-4161-9F07-9A01C355820A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA7F4291-664F-4161-9F07-9A01C355820A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BBB23C9-9E3A-4620-BB14-86DD5AA17340}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BBB23C9-9E3A-4620-BB14-86DD5AA17340}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BBB23C9-9E3A-4620-BB14-86DD5AA17340}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BBB23C9-9E3A-4620-BB14-86DD5AA17340}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9F62F72-92F1-42B5-A101-41F29350A4C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9F62F72-92F1-42B5-A101-41F29350A4C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9F62F72-92F1-42B5-A101-41F29350A4C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9F62F72-92F1-42B5-A101-41F29350A4C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
