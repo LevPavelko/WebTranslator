@@ -47,6 +47,10 @@ app.UseCors(builder => builder.WithOrigins("https://webtranslator-bdgtdnb7cde9ee
                            .AllowAnyHeader()
                            .AllowAnyMethod()
                             .AllowCredentials());
+app.UseCors(builder => builder.WithOrigins("http://localhost:5155")
+                           .AllowAnyHeader()
+                           .AllowAnyMethod()
+                            .AllowCredentials());
 
 
 app.Run();
