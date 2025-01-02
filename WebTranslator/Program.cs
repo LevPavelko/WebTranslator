@@ -37,7 +37,11 @@ app.UseSession();
     app.UseSwaggerUI();
 }*/
 
-
+app.UseRouting();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapFallbackToFile("index.html");
+});
 app.UseDefaultFiles();
 app.UseStaticFiles();
 app.UseHttpsRedirection();

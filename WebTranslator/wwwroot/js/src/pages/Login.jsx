@@ -135,6 +135,7 @@ function Login() {
                                     required
                                     value={username}
                                     onChange={(e) => setUsername(e.target.value)}
+                                    name="Username"
                                 />
                                 <i className="bx bxs-user"></i>
                             </div>
@@ -145,12 +146,13 @@ function Login() {
                                     required
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
+                                    name="Password"
                                 />
                                 <i className="bx bxs-lock-alt"></i>
                             </div>
                             {error && <div className="error-message">{error}</div>}
 
-                            <button type="submit" className="btn" id="submitLogin">Login</button>
+                            <button type="submit" className="btn" id="submitLogin" name="Login">Login</button>
                         </form>
                     </div>
                 ) : (
