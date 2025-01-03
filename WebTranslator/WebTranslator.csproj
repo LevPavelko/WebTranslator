@@ -25,4 +25,8 @@
       <ProjectReference Include="..\WebTranslator.BLL\WebTranslator.BLL.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="wwwroot\js\dist\" />
+    </ItemGroup>
+
 </Project>

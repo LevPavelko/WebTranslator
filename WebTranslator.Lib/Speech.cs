@@ -14,23 +14,7 @@ public class Speech
     private static readonly string endpoint = "https://api.cognitive.microsofttranslator.com/";
     private static readonly string location = "eastus";
     
-    public void ConverToWav(string inputFilePath, string outputFilePath)
-    { 
-        var ffmpegPath = @"/usr/bin/ffmpeg";  
-        var startInfo = new ProcessStartInfo
-        {
-            FileName = ffmpegPath,
-            Arguments = $"-i \"{inputFilePath}\" \"{outputFilePath}\"",
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            UseShellExecute = false
-        };
-
-        using (var process = Process.Start(startInfo))
-        {
-            process.WaitForExit();
-        }
-    }
+   
     private static bool IsWavFile(string filePath)
     {
         try
