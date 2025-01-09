@@ -108,11 +108,13 @@ public class Speech
     public async Task<string> TextToSpeech(string text)
     {
         var speechConfig = SpeechConfig.FromSubscription("f1835bf847064e36a7c3f95f81f53355", "eastus");
-        speechConfig.SpeechSynthesisVoiceName = "en-US-AvaMultilingualNeural"; 
+        speechConfig.SpeechSynthesisVoiceName = "en-US-AvaMultilingualNeural";
 
         try
         {
             var filePath = Path.Combine("Uploads/", "translated_audio.wav"); // was :  var filePath = Path.Combine("Uploads/", "translated_audio.wav");
+
+            System.Diagnostics.Trace.TraceInformation(filePath);
             var audioConfig = AudioConfig.FromWavFileOutput(filePath);
             using var synthesizer = new SpeechSynthesizer(speechConfig, audioConfig);
             var result = await synthesizer.SpeakTextAsync(text);
