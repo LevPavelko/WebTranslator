@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 string? connStr = builder.Configuration.GetConnectionString("DefaultConnStr");
+Console.WriteLine("ddd  " + connStr);
 
 builder.Services.AddDbContext<WebTranslatorContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnStr"),
@@ -47,10 +48,7 @@ app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.MapControllers();
 
-app.UseCors(builder => builder.WithOrigins("https://webtranslator-bdgtdnb7cde9eedp.canadacentral-01.azurewebsites.net")
-                           .AllowAnyHeader()
-                           .AllowAnyMethod()
-                            .AllowCredentials());
+
 app.UseCors(builder => builder.WithOrigins("http://localhost:5155")
                            .AllowAnyHeader()
                            .AllowAnyMethod()

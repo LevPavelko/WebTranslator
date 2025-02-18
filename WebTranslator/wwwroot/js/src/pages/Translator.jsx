@@ -81,25 +81,6 @@ function Translator() {
 
         cleanBeforeRecording();
 
-        //console.log(`Recording in ${from}, translating to ${to}`);
-        //audioChunksRef.current = [];
-
-        //const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-
-        //mediaRecorderRef.current = new MediaRecorder(stream);
-        //mediaRecorderRef.current.ondataavailable = (event) => {
-        //    audioChunksRef.current.push(event.data);
-        //};
-
-        //mediaRecorderRef.current.onstop = () => {
-            
-        //    const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
-        //    uploadAudio(audioBlob, from, to);
-        //};
-
-        //mediaRecorderRef.current.start();
-        //setIsRecording(true); 
-
 
         console.log(`Recording in ${from}, translating to ${to}`);
         audioChunksRef.current = [];
@@ -199,7 +180,7 @@ function Translator() {
             formData.append('to', to);
            
 
-            const response = await fetch('https://webtranslator-bdgtdnb7cde9eedp.canadacentral-01.azurewebsites.net/api/audio/upload', {
+            const response = await fetch('http://localhost:5155/api/audio/upload', {
                 method: 'POST',
                 body: formData
             });

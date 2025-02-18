@@ -112,9 +112,9 @@ public class Speech
 
         try
         {
-            var filePath = Path.Combine("Uploads/", "translated_audio.wav"); // was :  var filePath = Path.Combine("Uploads/", "translated_audio.wav");
+            var filePath = Path.Combine("Uploads/", "translated_audio.wav"); 
 
-            System.Diagnostics.Trace.TraceInformation(filePath);
+            
             var audioConfig = AudioConfig.FromWavFileOutput(filePath);
             using var synthesizer = new SpeechSynthesizer(speechConfig, audioConfig);
             var result = await synthesizer.SpeakTextAsync(text);
